@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KENOSIS — Estética Urbana, Identidad Eterna</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --off-white: #F8F7F5;
+      --grey-light: #E8E6E3;
+      --grey-mid: #999;
+      --serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --nav-h: 72px;
+      --transition: 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    a, button, .btn-buy { cursor: pointer; }
+
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: var(--nav-h);
+      background: transparent;
+      transition: background var(--transition), border-bottom 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(255,255,255,0.94);
+      border-bottom: 1px solid var(--grey-light);
+      backdrop-filter: blur(10px);
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.4s;
+    }
+    nav.scrolled .nav-logo { color: var(--black); }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: rgba(255,255,255,0.75);
+      position: relative;
+      transition: color 0.4s;
+    }
+    nav.scrolled .nav-links a { color: var(--grey-mid); }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: currentColor;
+      transition: width 0.4s ease;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    nav.scrolled .nav-links a:hover { color: var(--black); }
+
+    /* ─── HAMBURGER MOBILE ─── */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--white);
+      transition: background 0.4s, transform 0.4s;
+    }
+    nav.scrolled .nav-toggle span { background: var(--black); }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--black);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 24px;
+    }
+    .hero-brand {
+      font-family: var(--serif);
+      font-size: clamp(4.5rem, 14vw, 11rem);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 0.95;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+      animation: fadeUp 1.2s 0.3s both ease;
+    }
+    .hero-slogan {
+      font-family: var(--serif);
+      font-size: clamp(0.9rem, 2.2vw, 1.25rem);
+      font-weight: 400;
+      font-style: italic;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.5;
+      letter-spacing: 0.04em;
+      animation: fadeUp 1.2s 0.55s both ease;
+    }
+    .hero-sub { display: none; }
+
+    /* ─── FIX 1: CTA "DESCUBRIR" centrado matemáticamente ─── */
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;   /* centra hijos en eje horizontal */
+      text-align: center;
+      gap: 10px;
+      animation: fadeUp 1.4s 1.2s both;
+      white-space: nowrap;   /* evita quiebres de línea inesperados */
+    }
+    .hero-scroll span {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: rgba(255,255,255,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: -100%; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255,255,255,0.6);
+      animation: scrollAnim 1.8s 1.5s ease-in-out infinite;
+    }
+    @keyframes scrollAnim {
+      0%   { top: -100%; }
+      100% { top: 200%; }
+    }
+
+    /* ─── FADE-IN ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.22s; }
+    .reveal-delay-3 { transition-delay: 0.38s; }
+    .reveal-delay-4 { transition-delay: 0.55s; }
+
+    /* ─── SECTION SHARED ─── */
+    section { padding: 120px 40px; }
+
+    /* ─── FIX 2: FILOSOFÍA — Estilo Diccionario ─── */
+    #filosofia {
+      background: var(--white);
+      padding: 160px 40px;
+    }
+    .filosofia-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .filosofia-titulo {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 10vw, 6.5rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      color: var(--black);
+      margin-bottom: 0;
+    }
+    .filosofia-linea {
+      border: none;
+      border-top: 1px solid var(--black);
+      width: 100%;
+      margin: 1.5rem 0 3rem;
+    }
+    .filosofia-definicion {
+      font-family: var(--serif);
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      font-weight: 400;
+      line-height: 1.85;
+      color: var(--black);
+    }
+    .filosofia-definicion p {
+      margin-bottom: 1.75rem;
+    }
+    .filosofia-definicion p:last-child {
+      margin-bottom: 0;
+    }
+    .filosofia-definicion .def-intro {
+      font-style: italic;
+      margin-bottom: 2.25rem;
+    }
+    .filosofia-definicion .def-num {
+      color: var(--grey-mid);
+      font-style: normal;
+    }
+
+    /* ─── COLECCIÓN — CARRUSEL ─── */
+    #coleccion {
+      background: var(--off-white);
+      padding: 120px 0 140px;
+    }
+    .coleccion-header {
+      text-align: center;
+      padding: 0 40px 80px;
+    }
+    .section-tag {
+      display: block;
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    /* Carrusel wrapper — layout de dos columnas: imagen | texto */
+    .carousel-wrap {
+      position: relative;
+      max-width: 90%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      column-gap: 64px;
+      align-items: start;
+    }
+
+    /* Imagen ocupa toda la columna izquierda en ambas filas */
+    .carousel-img-wrap {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      background: var(--grey-light);
+    }
+    .carousel-img-wrap img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.65s ease;
+    }
+    .carousel-img-wrap img.active {
+      opacity: 1;
+    }
+
+    /* Texto ocupa columna derecha, fila 1 */
+    .carousel-text {
+      grid-column: 2;
+      grid-row: 1;
+      padding: 40px 0 0;
+      position: relative;
+      min-height: 320px;
+    }
+    .carousel-slide-text {
+      position: absolute;
+      top: 40px; left: 0; right: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    .carousel-slide-text.active {
+      opacity: 1;
+      pointer-events: auto;
+      position: relative;
+      top: 0;
+    }
+    .carousel-num {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--grey-mid);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 24px;
+    }
+    .carousel-name {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 32px;
+    }
+    .carousel-desc {
+      font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+      font-weight: 300;
+      line-height: 1.9;
+      color: #444;
+      max-width: 100%;
+    }
+
+    /* Controles en columna derecha, fila 2 — debajo del texto */
+    .carousel-controls {
+      grid-column: 2;
+      grid-row: 2;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-top: 56px;
+    }
+    .carousel-arrow {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: 1px solid rgba(0,0,0,0.18);
+      cursor: pointer;
+      transition: border-color 0.3s ease, background 0.3s ease;
+      flex-shrink: 0;
+    }
+    .carousel-arrow:hover {
+      background: var(--black);
+      border-color: var(--black);
+    }
+    .carousel-arrow:hover svg { stroke: var(--white); }
+    .carousel-arrow svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--black);
+      fill: none;
+      stroke-width: 1.5;
+      transition: stroke 0.3s ease;
+    }
+
+    /* Puntos — en la fila de controles, separados de las flechas */
+    .carousel-dots {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: 8px;
+    }
+    .carousel-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--grey-light);
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+      padding: 0;
+    }
+    .carousel-dot.active {
+      background: var(--black);
+      transform: scale(1.4);
+    }
+    .carousel-dot.active {
+      background: var(--black);
+      transform: scale(1.3);
+    }
+
+    /* ─── CITA BÍBLICA ─── */
+    #cita {
+      background: var(--black);
+      padding: 140px 40px;
+      text-align: center;
+    }
+    .cita-text {
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 3.5vw, 2.6rem);
+      color: var(--white);
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 0 auto 32px;
+    }
+    .cita-ref {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--grey-light);
+      padding: 80px 40px 48px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 72px;
+    }
+    .footer-brand .brand-name {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+    }
+    .footer-brand p {
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--grey-mid);
+      line-height: 1.8;
+      max-width: 240px;
+    }
+    .footer-col h4 {
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 24px;
+      font-weight: 400;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 14px; }
+    .footer-col ul a {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--black);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-col ul a:hover { color: var(--grey-mid); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--grey-light);
+      padding-top: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-frase {
+      font-family: var(--serif);
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      font-style: italic;
+      color: var(--black);
+    }
+    .footer-copy {
+      font-size: 0.72rem;
+      color: var(--grey-mid);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── MOBILE NAV OVERLAY ─── */
+    .nav-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+    .nav-overlay.open { display: flex; }
+    .nav-overlay a {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      color: var(--white);
+      text-decoration: none;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      transition: color 0.3s;
+    }
+    .nav-overlay a:hover { color: var(--grey-mid); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .carousel-wrap {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        max-width: 88%;
+      }
+      .carousel-img-wrap {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .carousel-text {
+        grid-column: 1;
+        grid-row: 2;
+        padding: 40px 0 0;
+        min-height: 260px;
+      }
+      .carousel-controls {
+        grid-column: 1;
+        grid-row: 3;
+        justify-content: center;
+        padding-top: 40px;
+      }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      section { padding: 80px 24px; }
+      #filosofia { padding: 100px 24px; }
+      .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .carousel-wrap { max-width: 92%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MOBILE NAV OVERLAY -->
+  <div class="nav-overlay" id="navOverlay">
+    <a href="#historia" onclick="closeNav()">Historia</a>
+    <a href="#coleccion" onclick="closeNav()">Colección</a>
+    <a href="#contacto" onclick="closeNav()">Contacto</a>
+  </div>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <a href="#hero" class="nav-logo">Kenosis</a>
+    <ul class="nav-links">
+      <li><a href="#filosofia">Historia</a></li>
+      <li><a href="#coleccion">Colección</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-content">
+      <h1 class="hero-brand">Kenosis</h1>
+      <p class="hero-slogan">Vacío interior</p>
+    </div>
+
+    <!-- FIX 1: left:50% + translateX(-50%) en CSS ya estaba correcto,
+         pero ahora align-items:center + text-align:center garantizan
+         que la línea y el texto queden perfectamente alineados entre sí -->
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Descubrir</span>
+    </div>
+  </section>
+
+  <!-- FIX 2: FILOSOFÍA — Nuevo formato estilo diccionario -->
+  <section id="filosofia">
+    <div class="filosofia-inner">
+      <h2 class="filosofia-titulo reveal">Kenosis</h2>
+      <hr class="filosofia-linea reveal reveal-delay-1" />
+      <div class="filosofia-definicion">
+        <p class="def-intro reveal reveal-delay-2">
+          Kenosis proviene del griego y significa vaciamiento.
+        </p>
+        <p class="reveal reveal-delay-3">
+          <span class="def-num">1—</span> En la teología cristiana, hace referencia al acto de Dios de vaciarse de su divinidad para hacerse hombre.
+        </p>
+        <p class="reveal reveal-delay-4">
+          <span class="def-num">2—</span> Acto de vaciarse de uno mismo, para volver a lo esencial.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLECCIÓN — CARRUSEL -->
+  <section id="coleccion">
+    <div class="coleccion-header">
+      <span class="section-tag reveal">Temporada I</span>
+      <h2 class="section-title reveal reveal-delay-1">Colección</h2>
+    </div>
+
+    <div class="carousel-wrap reveal">
+
+      <!-- Columna izquierda: imagen -->
+      <div class="carousel-img-wrap">
+        <img src="1.jpg" alt="Hoodie Origen"        class="active" data-index="0" />
+        <img src="2.jpg" alt="Camiseta Eternidad"            data-index="1" />
+        <img src="3.jpg" alt="Hoodie Sacrificio"             data-index="2" />
+        <img src="4.jpg" alt="Camiseta Nueva Vida"           data-index="3" />
+      </div>
+
+      <!-- Columna derecha fila 1: texto -->
+      <div class="carousel-text">
+
+        <div class="carousel-slide-text active" data-index="0">
+          <span class="carousel-num">01 — Temporada I</span>
+          <h3 class="carousel-name">Hoodie 'Origen'</h3>
+          <p class="carousel-desc">El Ichthys (o pez cristiano) era el símbolo secreto que los primeros cristianos usaban para identificarse entre sí en tiempos de persecución. Dos trazos, una figura simple, y quien lo veía sabía inmediatamente a qué familia pertenecía.</p>
+        </div>
+
+        <div class="carousel-slide-text" data-index="1">
+          <span class="carousel-num">02 — Temporada I</span>
+          <h3 class="carousel-name">Camiseta 'Eternidad'</h3>
+          <p class="carousel-desc">La primera y última letra del alfabeto griego. En Apocalipsis, Dios las usa para describirse a sí mismo: el que existía antes de todo y existirá después de todo. Apoc 22:13</p>
+        </div>
+
+        <div class="carousel-slide-text" data-index="2">
+          <span class="carousel-num">03 — Temporada I</span>
+          <h3 class="carousel-name">Hoodie 'Sacrificio'</h3>
+          <p class="carousel-desc">"Consumado es." La última palabra que Jesús pronunció en la cruz. En griego antiguo, era el término que se escribía sobre una deuda completamente saldada. Jn 19:30</p>
+        </div>
+
+        <div class="carousel-slide-text" data-index="3">
+          <span class="carousel-num">04 — Temporada I</span>
+          <h3 class="carousel-name">Camiseta 'Nueva Vida'</h3>
+          <p class="carousel-desc">Gálatas 2:20 describe el centro de la fe cristiana: una identidad que muere y es reemplazada por algo completamente nuevo. Gl 2:20</p>
+        </div>
+
+      </div>
+
+      <!-- Columna derecha fila 2: flechas + puntos -->
+      <div class="carousel-controls">
+        <button class="carousel-arrow prev" id="prevBtn" aria-label="Anterior">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="carousel-arrow next" id="nextBtn" aria-label="Siguiente">
+          <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+        <div class="carousel-dots">
+          <button class="carousel-dot active" data-index="0" aria-label="Slide 1"></button>
+          <button class="carousel-dot"        data-index="1" aria-label="Slide 2"></button>
+          <button class="carousel-dot"        data-index="2" aria-label="Slide 3"></button>
+          <button class="carousel-dot"        data-index="3" aria-label="Slide 4"></button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contacto">
+    <div class="footer-inner">
+      <div class="footer-brand reveal">
+        <div class="brand-name">Kenosis</div>
+        <p>Estética urbana construida sobre una identidad que no caduca. Fe hecha forma.</p>
+      </div>
+      <div class="footer-col reveal reveal-delay-1">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="#filosofia">Historia</a></li>
+          <li><a href="#coleccion">Colección</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col reveal reveal-delay-2">
+        <h4>Contacto</h4>
+        <ul>
+          <li>
+            <a href="https://wa.me/593939724033" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/kenosis.clo/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-frase">"Kenosis: Estética urbana, identidad eterna."</span>
+      <span class="footer-copy">© 2025 Kenosis. Todos los derechos reservados.</span>
+    </div>
+  </footer>
+
+  <script>
+    // ── NAV SCROLL ──────────────────────────────────────────
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    // ── MOBILE NAV ──────────────────────────────────────────
+    const toggle = document.getElementById('navToggle');
+    const overlay = document.getElementById('navOverlay');
+    toggle.addEventListener('click', () => {
+      overlay.classList.toggle('open');
+    });
+    function closeNav() {
+      overlay.classList.remove('open');
+    }
+
+    // ── SCROLL REVEAL ───────────────────────────────────────
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // ── CARRUSEL ────────────────────────────────────────────
+    const total = 4;
+    let current = 0;
+    let isAnimating = false;
+
+    const imgs   = document.querySelectorAll('.carousel-img-wrap img');
+    const texts  = document.querySelectorAll('.carousel-slide-text');
+    const dots   = document.querySelectorAll('.carousel-dot');
+
+    function goTo(index) {
+      if (isAnimating || index === current) return;
+      isAnimating = true;
+
+      // Fade out actual
+      imgs[current].classList.remove('active');
+      texts[current].classList.remove('active');
+      dots[current].classList.remove('active');
+
+      current = (index + total) % total;
+
+      // Fade in nuevo
+      imgs[current].classList.add('active');
+      texts[current].classList.add('active');
+      dots[current].classList.add('active');
+
+      setTimeout(() => { isAnimating = false; }, 700);
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => goTo(Number(dot.dataset.index)));
+    });
+
+    // Swipe táctil
+    let touchStartX = 0;
+    const imgWrap = document.querySelector('.carousel-img-wrap');
+    imgWrap.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    imgWrap.addEventListener('touchend', e => {
+      const delta = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(delta) > 40) goTo(delta < 0 ? current + 1 : current - 1);
+    });
+  </script>
+</body>
+</html>
